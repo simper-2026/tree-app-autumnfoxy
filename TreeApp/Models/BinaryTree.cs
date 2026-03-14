@@ -7,7 +7,7 @@ public class BinaryTree{
       Insert(value, rootNode);
     }
   }
-  public void Insert(int value, Node node){
+  private void Insert(int value, Node node){
     if(node.Value == value){
       return;
     }else if (value > node.Value){
@@ -26,8 +26,23 @@ public class BinaryTree{
   }
 
   public string InOrder(){
-    return "";
+    if (rootNode == null)
+      return "";
+    return InOrder(rootNode);
   }
+  
+  private string InOrder(Node node){
+    string result = "";
+    if (node.Left != null){
+      result += InOrder(node.Left);
+    }
+    result += node.Value + " ";
+    if (node.Right != null){
+      result += InOrder(node.Right);
+    }
+    return result;
+  }
+  
   public int Height(){
     return -1;
   }
