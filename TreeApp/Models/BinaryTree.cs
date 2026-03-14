@@ -44,7 +44,19 @@ public class BinaryTree{
   }
   
   public int Height(){
-    return -1;
+    if (rootNode == null)
+      return -1;
+    return Height(rootNode);
+  }
+  private int Height(Node node){
+    int result = 0;
+    if (node.Left != null){
+      result = 1 + Height(node.Left);
+    }
+    if (node.Right != null){
+      result = Math.Max(result, 1+Height(node.Right));
+    }
+    return result;
   }
   public string ToMermaid(){
     return "";
