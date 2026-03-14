@@ -59,6 +59,40 @@ public class BinaryTree{
     return result;
   }
   public string ToMermaid(){
-    return "";
+    int count = 0;
+    if(rootNode == null){
+      return "graph TD\n empty[\"(empty tree)\"]";
+    }
+    if(rootNode.Left == null && rootNode.Right == null){
+      return $"graph TD\n {rootNode.Value}";
+    }
+    return "graph TD;\n"+ ToMermaid(rootNode, ref count);
+  }
+  private string ToMermaid(Node node, ref int count){
+    string result = "";
+    if(node.Left == null && node.Right == null){
+      return "";
+    }
+    if(node.Left != null){
+      result += $"{node.Value} --> {node.Left.Value}\n";
+      count++;
+      result += ToMermaid(node.Left, ref count);
+    }else{
+      result += $"{node.Value} --> _ph{count}[ ]\n";
+      result += $"linkStyle {count} stroke:none,stroke-width:0,fill:none\n";
+      result += $"style _ph{count} fill:none,stroke:none,color:none\n";
+      count++;
+    }
+    if(node.Right != null){
+      result += $"{node.Value} --> {node.Right.Value}\n";
+      count++;
+      result += ToMermaid(node.Right, ref count);
+    }else{
+      result += $"{node.Value} --> _ph{count}[ ]\n";
+      result += $"linkStyle {count} stroke:none,stroke-width:0,fill:none\n";
+      result += $"style _ph{count} fill:none,stroke:none,color:none\n";
+      count++;
+    }
+    return result;
   }
 }
