@@ -6,6 +6,7 @@ public class BinaryTree{
     }else{
       Insert(value, rootNode);
     }
+    UpdateHeight(rootNode);
   }
   private void Insert(int value, Node node){
     if(node.Value == value){
@@ -63,10 +64,7 @@ public class BinaryTree{
     if(rootNode == null){
       return "graph TD\n empty[\"(empty tree)\"]";
     }
-    if(rootNode.Left == null && rootNode.Right == null){
-      return $"graph TD\n {rootNode.Value}";
-    }
-    return "graph TD;\n"+ ToMermaid(rootNode, ref count);
+    return "graph TD;\n" + $"{rootNode.Value}[{rootNode.Value} h:{rootNode.Height}]\n" + ToMermaid(rootNode, ref count);
   }
   private string ToMermaid(Node node, ref int count){
     string result = "";
@@ -74,7 +72,7 @@ public class BinaryTree{
       return "";
     }
     if(node.Left != null){
-      result += $"{node.Value} --> {node.Left.Value}\n";
+      result += $"{node.Value} --> {node.Left.Value}[{node.Left.Value} h:{node.Left.Height}]\n";
       count++;
       result += ToMermaid(node.Left, ref count);
     }else{
@@ -84,7 +82,7 @@ public class BinaryTree{
       count++;
     }
     if(node.Right != null){
-      result += $"{node.Value} --> {node.Right.Value}\n";
+      result += $"{node.Value} --> {node.Right.Value}[{node.Right.Value} h:{node.Right.Height}]\n";
       count++;
       result += ToMermaid(node.Right, ref count);
     }else{
@@ -94,5 +92,15 @@ public class BinaryTree{
       count++;
     }
     return result;
+  }
+  private int UpdateHeight(Node? node){
+    if( node == null ){
+      return -1;
+    }
+    int rHeight = UpdateHeight(node.Right);
+    int lHeight = UpdateHeight(node.Left);
+    int height = Math.Max(rHeight, lHeight) + 1;
+    node.Height = height;
+    return height;
   }
 }
