@@ -2,7 +2,7 @@ public class BinaryTree{
   private Node? rootNode;
   public void Insert(int value){
     if(rootNode == null){
-      rootNode = new Node(value);
+      rootNode = new Node(value, null);
     }else{
       Insert(value, rootNode);
     }
@@ -14,13 +14,13 @@ public class BinaryTree{
       if (node.Right != null){
         Insert(value, node.Right);
       }else{
-        node.Right = new Node(value);
+        node.Right = new Node(value, node);
       }
     }else{
       if (node.Left != null){
         Insert(value, node.Left);
       }else{
-        node.Left = new Node(value);
+        node.Left = new Node(value, node);
       }
     }
   }
