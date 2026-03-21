@@ -6,7 +6,6 @@ public class BinaryTree{
     }else{
       Insert(value, rootNode);
     }
-    UpdateHeight(rootNode);
   }
   private void Insert(int value, Node node){
     if(node.Value == value){
@@ -16,12 +15,16 @@ public class BinaryTree{
         Insert(value, node.Right);
       }else{
         node.Right = new Node(value, node);
+        UpdateHeight(rootNode);
+        Rebalance(node.Right);
       }
     }else{
       if (node.Left != null){
         Insert(value, node.Left);
       }else{
         node.Left = new Node(value, node);
+        UpdateHeight(rootNode);
+        Rebalance(node.Left);
       }
     }
   }
@@ -101,6 +104,54 @@ public class BinaryTree{
     int lHeight = UpdateHeight(node.Left);
     int height = Math.Max(rHeight, lHeight) + 1;
     node.Height = height;
+    if(node.Right != null){
+      node.Right.Parent = node;
+    }
+    if(node.Left != null){
+      node.Left.Parent = node;
+    }
     return height;
+  }
+  private Node RotateRight(Node z){
+    Node y = z.Left;
+    Node? t3 = y.Right;
+    y.Right = z;
+    z.Left = t3;
+    return y;
+  }
+  private Node RotateLeft(Node z){
+    Node y = z.Right;
+    Node? t2 = y.Left;
+    y.Left = z;
+    z.Right = t2;
+    return y;
+  }
+  private void Rebalance(Node node){
+    int diff = (node.Left?.Height ?? -1) - (node.Right?.Height ?? -1);
+    if(diff > 1){
+      if(node.Parent == null){
+        rootNode = RotateRight(node);
+        rootNode.Parent = null;
+      }else if(node.Parent.Right == node){
+        node.Parent.Right = RotateRight(node);
+      }else if (node.Parent.Left == node){
+          node.Parent.Left = RotateRight(node);
+      }
+      UpdateHeight(rootNode);
+    }
+    if(diff < -1){
+      if(node.Parent == null){
+        rootNode = RotateLeft(node);
+        rootNode.Parent = null;
+      }else if(node.Parent.Right == node){
+        node.Parent.Right = RotateLeft(node);
+      }else if (node.Parent.Left == node){
+          node.Parent.Left = RotateLeft(node);
+      }
+      UpdateHeight(rootNode);
+    }
+    if(node.Parent != null){
+      Rebalance(node.Parent);
+    }
   }
 }
